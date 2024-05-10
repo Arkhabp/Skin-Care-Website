@@ -1,10 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./Pages/LandingPage";
-import ProdukPage from "./Pages/ProdukPage";
-import NotFoundPage from "./Pages/NotFoundPage";
-import TentangKami from "./Pages/TentangKamiPage";
-import EdukasiPage from "./Pages/EdukasiPage";
+import LandingPage from "./Pages/LandingPage.js";
+import ProdukPage from "./Pages/ProdukPage.js";
+import NotFoundPage from "./Pages/NotFoundPage.js";
+import TentangKami from "./Pages/TentangKamiPage.tsx";
+import EdukasiPage from "./Pages/EdukasiPage.tsx";
 
 function App() {
   return (
