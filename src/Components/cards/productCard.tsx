@@ -7,6 +7,7 @@ interface ProductCardProps {
   productName?: string;
   desc?: string;
   price?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -14,10 +15,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   altProduct,
   productName,
   desc,
-  price
+  price,
+  onClick
 }) => {
   return (
-    <Box>
+    <Box onClick={onClick} _hover={{ cursor: "pointer" }}>
       <Box
         role="group"
         w="210px"

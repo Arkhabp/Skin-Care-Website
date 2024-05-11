@@ -3,6 +3,8 @@ export default class Colors {
   static white: string = "#FFFFFF";
   static brokenWhite: string = "#E5E9EC";
   static lightgrey: string = "#CCE9E3";
+  static darkGrey: string = "#808080";
+  static silverGrey: string = "#B9DBCF";
   static bgProduct: string = "#D6F0EA";
   static darkGreen: string = "#6EB095";
   static pink: string = "#FCCACA";
