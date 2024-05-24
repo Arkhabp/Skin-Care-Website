@@ -65,7 +65,7 @@ const LandingPage = () => {
 
         <Box overflowX="hidden" py={5} position="relative">
           <Box overflowX="auto" py={5} _hover={{ cursor: "pointer" }}>
-            <Box
+            {/* <Box
               aria-label="Scroll Left"
               position="absolute"
               top="50%"
@@ -74,7 +74,7 @@ const LandingPage = () => {
               onClick={() => handleScroll("left")}
             >
               <Icons name="ArrowLeft" />
-            </Box>
+            </Box> */}
             <Box
               overflowX="auto"
               ref={scrollRef}
@@ -93,7 +93,7 @@ const LandingPage = () => {
                 ))}
               </HStack>
             </Box>
-            <Box
+            {/* <Box
               aria-label="Scroll Left"
               position="absolute"
               top="50%"
@@ -102,7 +102,7 @@ const LandingPage = () => {
               onClick={() => handleScroll("left")}
             >
               <Icons name="ArrowRight" />
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Box>

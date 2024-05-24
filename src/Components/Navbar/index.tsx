@@ -8,8 +8,19 @@ import {
   Text
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
+import Icons from "../icons";
+import Colors from "../../constans/color";
+import { useAppSelector } from "../../store/hooks";
 
 const NavbarComponent = () => {
+  const cartItems = useAppSelector((state) => state.addTochart.product.data);
+
+  // Mengambil total quantity dari semua item di keranjang belanja
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <Flex
       className="navbar"
@@ -21,13 +32,18 @@ const NavbarComponent = () => {
       <Hide breakpoint="(max-width: 989px)">
         <Box flex={1} mx="5" py="5">
           <Flex justifyContent={"space-between"}>
-            <Heading
-              fontWeight={"bold"}
-              size={"md"}
-              color={useColorModeValue("fontColor.black", "primary.whiteDoff")}
-            >
-              LOGO
-            </Heading>
+            <NavLink to="/">
+              <Heading
+                fontWeight={"bold"}
+                size={"md"}
+                color={useColorModeValue(
+                  "fontColor.black",
+                  "primary.whiteDoff"
+                )}
+              >
+                MS Glow "Reseller"
+              </Heading>
+            </NavLink>
 
             <Box display={"flex"} alignItems={"center"}>
               <NavLink to="/produk">
@@ -56,28 +72,32 @@ const NavbarComponent = () => {
                   Edukasi
                 </Text>
               </NavLink>
-              <NavLink to="/tentang-kami">
-                <Box
-                  border="0.5px solid ActiveBorder"
-                  borderRadius={6}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  py={2}
-                  px={4}
-                  ml={8}
-                >
-                  <Text
-                    fontWeight={"semibold"}
-                    size={"md"}
-                    color={useColorModeValue(
-                      "fontColor.black",
-                      "primary.whiteDoff"
-                    )}
-                  >
-                    Tentang kami
-                  </Text>
+              <NavLink to="/keranjang-belanja">
+                <Box ml={8} position={"relative"}>
+                  <Icons name="BagShopping" size="lg" />
                 </Box>
+                {totalQuantity ? (
+                  <Box
+                    background={Colors.darkGreen}
+                    w={"18px"}
+                    h={"18px"}
+                    borderRadius={"10px"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    display={"flex"}
+                    position={"absolute"}
+                    right={2}
+                    top={5}
+                  >
+                    <Text
+                      color={Colors.white}
+                      fontSize={"12px"}
+                      fontWeight={"medium"}
+                    >
+                      {totalQuantity}
+                    </Text>
+                  </Box>
+                ) : null}
               </NavLink>
             </Box>
           </Flex>

@@ -18,7 +18,8 @@ import {
   faFloppyDisk,
   faArrowLeft,
   faArrowRight,
-  faCheck
+  faCheck,
+  faBagShopping
 } from "@fortawesome/free-solid-svg-icons";
 interface IconsProps {
   name?: string;
@@ -75,6 +76,9 @@ const Icons: React.FC<IconsProps> = ({
       break;
     case "Check":
       icon = faCheck;
+      break;
+    case "BagShopping":
+      icon = faBagShopping;
       break;
     default:
       break;

@@ -19,7 +19,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onClick
 }) => {
   return (
-    <Box onClick={onClick} _hover={{ cursor: "pointer" }}>
+    <Box
+      onClick={onClick}
+      _hover={{ cursor: "pointer" }}
+      w={"200px"}
+      mb={"25px"}
+    >
       <Box
         role="group"
         w="210px"
@@ -28,7 +33,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
         borderRadius="sm"
         overflow="hidden"
         background={Colors.bgProduct}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
+        {/* Use imageProduct directly in the src attribute */}
         <Image src={imageProduct} alt={altProduct} />
       </Box>
 
@@ -45,7 +54,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Text
           fontSize={"sm"}
           fontWeight={"regular"}
-          width={"90%"}
+          width={"100%"}
           noOfLines={2}
         >
           {desc}
