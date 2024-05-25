@@ -1,6 +1,7 @@
 export default class Colors {
   static darkBlue: string = "#003E53";
   static white: string = "#FFFFFF";
+  static white1: string = "#F3F3F3";
   static brokenWhite: string = "#E5E9EC";
   static lightgrey: string = "#CCE9E3";
   static darkGrey: string = "#808080";

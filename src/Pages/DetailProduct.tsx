@@ -27,7 +27,8 @@ const DetailProduct = () => {
       category: product.category,
       price: product.price,
       productName: product.productName,
-      quantity: product.quantity
+      quantity: product.quantity,
+      id: product.id
     };
     dispatch(addTochart(productData));
     toast({

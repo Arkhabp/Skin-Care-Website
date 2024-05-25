@@ -63,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           fontSize={"md"}
           fontWeight={"semibold"}
           width={"100%"}
-          mt={"15px"}
+          mt={"10px"}
         >
           {price}
         </Text>

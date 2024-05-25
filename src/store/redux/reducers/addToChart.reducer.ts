@@ -52,11 +52,7 @@ const addTochartReducer = (state = initialState, action: any) => {
         );
         return {
           ...state,
-          product: {
-            data: updatedData,
-            error: null,
-            isLoading: false
-          }
+          product: { data: updatedData, error: null, isLoading: false }
         };
       } else {
         // Produk belum ada, tambahkan produk baru
@@ -69,13 +65,64 @@ const addTochartReducer = (state = initialState, action: any) => {
           }
         };
       }
+
     case types.ADD_PRODUCT_FAILURE:
+      return {
+        ...state,
+        product: { ...state.product, error: action.payload, isLoading: false }
+      };
+    case types.DELETE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        product: { ...state.product, isLoading: true, error: null }
+      };
+    case types.DELETE_PRODUCT_SUCCESS:
+      const updatedDataAfterDelete = state.product.data.filter(
+        product => product.id !== action.payload.id
+      );
+      return {
+        ...state,
+        product: { data: updatedDataAfterDelete, error: null, isLoading: false }
+      };
+    case types.DELETE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        product: { ...state.product, error: action.payload, isLoading: false }
+      };
+
+    case types.INCREASE_QUANTITY:
       return {
         ...state,
         product: {
           ...state.product,
-          error: action.payload,
-          isLoading: false
+          data: state.product.data.map(
+            product =>
+              product.id === action.payload
+                ? { ...product, quantity: (product.quantity || 0) + 1 }
+                : product
+          )
+        }
+      };
+    case types.DECREASE_QUANTITY:
+      return {
+        ...state,
+        product: {
+          ...state.product,
+          data: state.product.data.map(
+            product =>
+              product.id === action.payload && (product.quantity || 0) > 1
+                ? { ...product, quantity: (product.quantity || 0) - 1 }
+                : product
+          )
+        }
+      };
+
+    case types.CLEAR_CART:
+      return {
+        ...state,
+        product: {
+          ...state.product,
+          data: []
         }
       };
     default:

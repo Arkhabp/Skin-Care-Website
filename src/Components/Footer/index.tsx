@@ -20,7 +20,7 @@ const FooterComponent = () => {
             size={"md"}
             color={useColorModeValue("fontColor.black", "primary.whiteDoff")}
           >
-            LOGO
+            MS Glow "Reseller"
           </Heading>
           <Text fontSize={"md"} fontWeight={"semibold"} color={Colors.darkGrey}>
             skincare@gmail.com

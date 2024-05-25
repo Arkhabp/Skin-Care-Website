@@ -16,3 +16,33 @@ export function addTochart(data: dataProduct) {
     }
   };
 }
+
+export const deleteProduct = (id: number) => {
+  return (dispatch: any) => {
+    dispatch({ type: types.DELETE_PRODUCT_REQUEST });
+    try {
+      // Simulasi penghapusan produk
+
+      dispatch({ type: types.DELETE_PRODUCT_SUCCESS, payload: { id } });
+    } catch (error) {
+      dispatch({
+        type: types.DELETE_PRODUCT_FAILURE,
+        payload: "error menghapus produk"
+      });
+    }
+  };
+};
+
+export const increaseQuantity = (id: number) => ({
+  type: types.INCREASE_QUANTITY,
+  payload: id
+});
+
+export const decreaseQuantity = (id: number) => ({
+  type: types.DECREASE_QUANTITY,
+  payload: id
+});
+
+export const clearCart = () => ({
+  type: types.CLEAR_CART
+});

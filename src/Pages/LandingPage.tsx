@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Box, Text, Stack, Image, Flex, HStack } from "@chakra-ui/react";
 import Navbar from "../Components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import demoProduk from "../assets/images/demo-produk.png";
 import ButtonComponent from "../Components/Buttons/ButtonComponent";
@@ -11,26 +11,10 @@ import dataProduct from "../Data/dummyDataProduct";
 import EducationCard from "../Components/cards/educationCard";
 import dataVitamins from "../Data/dummyDataEducations";
 import FooterComponent from "../Components/Footer";
-import Icons from "../Components/icons";
 
 const LandingPage = () => {
-  const [scrollX, setScrollX] = useState<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = (direction: "left" | "right"): void => {
-    const scrollWidth: number = scrollRef.current!.scrollWidth;
-    const visibleWidth: number = scrollRef.current!.clientWidth;
-    const newScrollX: number =
-      direction === "left" ? scrollX - visibleWidth : scrollX + visibleWidth;
-
-    if (newScrollX < 0) {
-      setScrollX(0);
-    } else if (newScrollX > scrollWidth - visibleWidth) {
-      setScrollX(scrollWidth - visibleWidth);
-    } else {
-      setScrollX(newScrollX);
-    }
-  };
   return (
     <Box backgroundColor={Colors.lightgrey}>
       <Navbar />
@@ -83,13 +67,15 @@ const LandingPage = () => {
             >
               <HStack spacing={4} px={5}>
                 {dataProduct.map((item) => (
-                  <ProductCard
-                    key={item.id}
-                    productName={item.name}
-                    desc={item.description}
-                    price={`Rp. ${item.price}`}
-                    onClick={() => alert("halo")}
-                  />
+                  <NavLink to={`/detail-produk/${item.id}`} key={item.id}>
+                    <ProductCard
+                      key={item.id}
+                      imageProduct={item.image}
+                      productName={item.productName}
+                      desc={item.description}
+                      price={`Rp. ${item.price}`}
+                    />
+                  </NavLink>
                 ))}
               </HStack>
             </Box>
