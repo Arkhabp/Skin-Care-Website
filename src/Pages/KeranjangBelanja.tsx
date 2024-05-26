@@ -9,7 +9,8 @@ import {
   Th,
   Td,
   Button,
-  Flex
+  Flex,
+  useToast
 } from "@chakra-ui/react";
 import Colors from "../constans/color";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -23,10 +24,14 @@ import {
   increaseQuantity
 } from "../store/redux/action/addToChart.function";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 const KeranjangBelanja = () => {
   const cartItems = useAppSelector((state) => state.addTochart.product.data);
   const dispatch = useAppDispatch();
+  const toast = useToast();
+
   // Menghitung total belanja
   const totalBelanja = cartItems.reduce(
     (acc, curr) => acc + curr.price * curr.quantity,
@@ -39,8 +44,13 @@ const KeranjangBelanja = () => {
   // Subtotal sebelum diskon (sama dengan total belanja)
   const subtotalBeforeDiscount = totalBelanja;
 
-  const handleDelete = (itemId: number) => {
+  const handleDelete = (itemId: number, productName: string) => {
     dispatch(deleteProduct(itemId));
+    toast({
+      title: `Berhasil menghapus dari keranjang: ${productName}`,
+      status: "error",
+      isClosable: true
+    });
   };
 
   const handleIncrease = (itemId: number) => {
@@ -74,6 +84,13 @@ const KeranjangBelanja = () => {
     window.open(whatsappURL, "_blank");
     dispatch(clearCart());
   };
+
+  useEffect(() => {
+    axios.post(`http://localhost:5038/api/add-to-chart`).then((response) => {
+      console.log(response.data);
+    });
+  });
+
   return (
     <>
       <Navbar />
@@ -147,7 +164,9 @@ const KeranjangBelanja = () => {
                       <Td>
                         <Box
                           as="button"
-                          onClick={() => handleDelete(item.id)} // Tambahkan onClick pada ikon
+                          onClick={() =>
+                            handleDelete(item.id, item.productName)
+                          } // Tambahkan onClick pada ikon
                           cursor="pointer" // Tambahkan pointer cursor untuk menunjukkan bahwa ini dapat diklik
                         >
                           <Icons name="Delete" size="sm" color={Colors.red} />

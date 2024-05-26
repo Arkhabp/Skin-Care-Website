@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import Colors from "../../constans/color";
 import Icons from "../icons";
+import { NavLink } from "react-router-dom";
 
 const FooterComponent = () => {
   return (
@@ -57,15 +58,21 @@ const FooterComponent = () => {
           <Text fontSize={"md"} fontWeight={"semibold"} color={Colors.black}>
             Ikuti Tur
           </Text>
-          <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
-            Produk
-          </Text>
-          <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
-            Edukasi
-          </Text>
-          <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
-            Tentang Kami
-          </Text>
+          <NavLink to={`/produk`}>
+            <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
+              Produk
+            </Text>
+          </NavLink>
+          <NavLink to={`/edukasi`}>
+            <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
+              Edukasi
+            </Text>
+          </NavLink>
+          <NavLink to={`/keranjang-belanja`}>
+            <Text fontSize={"sm"} fontWeight={"regular"} color={Colors.grey}>
+              Keranjang
+            </Text>
+          </NavLink>
         </Stack>
 
         <Stack spacing={1} direction="column">
