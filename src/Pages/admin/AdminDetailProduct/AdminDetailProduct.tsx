@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Image,
@@ -15,39 +15,97 @@ import {
   Input,
   Textarea,
   FormControl,
-  FormLabel
+  FormLabel,
+  useToast
 } from "@chakra-ui/react";
 import Colors from "../../../constans/color";
 import { useParams } from "react-router-dom";
-import dataProduct from "../../../Data/dummyDataProduct";
 import Helper from "../../../helpers";
 import FooterComponent from "../../../Components/Footer";
 import NavbarAdmin from "../../../Components/Navbar/NavbarAdmin";
 import Icons from "../../../Components/icons";
+import dataProduct from "../../../Data/dummyDataProduct";
+import axios from "axios";
 
 const AdminDetailProduct = () => {
   const { id } = useParams();
-  const product = dataProduct.find((item) => item.id.toString() === id);
-
+  const toast = useToast();
+  const [product, setProduct] = useState<product | null | any>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [productName, setProductName] = useState(product?.productName || "");
-  const [description, setDescription] = useState(product?.description || "");
-  const [price, setPrice] = useState(product?.price || 0);
-  const [image, setImage] = useState(product?.image || "");
+  const [productName, setProductName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [image, setImage] = useState("");
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const handleSave = () => {
-    // Simpan perubahan produk di sini
-    // Misalnya, update produk di state atau kirim ke API
-    handleClose();
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+        const productData = response.data;
+
+        setProduct(productData);
+        setProductName(productData.productName);
+        setDescription(productData.description);
+        setPrice(productData.price);
+        setImage(productData.image);
+      } catch (error: any) {
+        // If fetching product fails, use dummy data
+        setProduct(dataProduct.find((item) => item.id.toString() === id));
+        toast({
+          title: "Gagal memuat produk.",
+          description: error.message,
+          status: "error",
+          isClosable: true
+        });
+      }
+    };
+
+    fetchProduct();
+  }, [id, toast]);
+
+  //EDIT PRODUCT
+  const editProduct = async () => {
+    try {
+      const updatedProduct = {
+        productName,
+        description,
+        price,
+        image
+      };
+      console.log(updatedProduct, id);
+
+      await axios.put(
+        `http://localhost:5000/api/admin/product/${id}`,
+        updatedProduct
+      );
+
+      toast({
+        title: "Produk berhasil diperbarui.",
+        status: "success",
+        isClosable: true
+      });
+
+      handleClose();
+    } catch (error: any) {
+      // Jika gagal memperbarui produk, tampilkan pesan kesalahan
+      toast({
+        title: "Gagal memperbarui produk.",
+        description: error.message,
+        status: "error",
+        isClosable: true
+      });
+    }
   };
 
   if (!product) {
     return (
       <Box>
-        <Text>Produk tidak ditemukan</Text>
+        <Text>Memuat produk...</Text>
       </Box>
     );
   }
@@ -64,7 +122,7 @@ const AdminDetailProduct = () => {
         >
           <Box flex="1" display="flex" justifyContent="center">
             <Image
-              src={product.image}
+              src={`../../../../API/uploads/${product.image}`}
               alt={product.productName}
               borderRadius="md"
               boxSize={{ base: "300px", md: "400px" }}
@@ -132,7 +190,7 @@ const AdminDetailProduct = () => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSave}>
+            <Button colorScheme="blue" mr={3} onClick={editProduct}>
               Simpan
             </Button>
             <Button variant="ghost" onClick={handleClose}>

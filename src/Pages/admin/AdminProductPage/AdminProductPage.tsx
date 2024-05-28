@@ -167,7 +167,7 @@ const AdminProdukPage = () => {
           ) : (
             <Grid templateColumns="repeat(5, 1fr)" gap={6}>
               {products.map((item: any) => (
-                <NavLink to={`/admin/detail-produk/${item.id}`} key={item.id}>
+                <NavLink to={`/admin/detail-produk/${item._id}`} key={item.id}>
                   <ProductCard
                     imageProduct={item.image}
                     key={item.id}
@@ -199,9 +199,9 @@ const AdminProdukPage = () => {
           ) : (
             <Grid templateColumns="repeat(5, 1fr)" gap={6}>
               {filteredDataProduct.map((item: any) => (
-                <NavLink to={`/detail-produk/${item.id}`} key={item.id}>
+                <NavLink to={`/admin/detail-produk/${item.id}`} key={item.id}>
                   <ProductCard
-                    imageProduct={item.image}
+                    imageProduct={item.image} // URL ke gambar di folder uploads
                     key={item.id}
                     productName={item.productName}
                     desc={item.description}

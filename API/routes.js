@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer'); 
 const path = require('path');
 const {getConnectedClient} = require('./database') 
+const { ObjectId } = require('mongodb');
 
 const getCollection = () => {
     const client = getConnectedClient();
@@ -44,7 +45,36 @@ routes.post("/products", async (req, res) => {
     }
 });
 
-//DELETE 
+// DELETE a product by ID
+routes.delete("/products/:id", async (req, res) => {
+    const { id } = req.params;
+    const collection = getCollection();
+    try {
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ msg: "Product not found" });
+        }
+        res.status(200).json({ msg: "Product successfully deleted" });
+    } catch (error) {
+        res.status(500).json({ msg: "Error deleting product", error: error.message });
+    }
+});
+
+// PUT (update) a product by ID
+routes.get("/products/:id", async (req, res) => {
+    const { id } = req.params;
+    const collection = getCollection();
+    try {
+        const product = await collection.findOne({ _id: new ObjectId(id) });
+        if (!product) {
+            return res.status(404).json({ msg: "Product not found" });
+        }
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({ msg: "Error retrieving product", error: error.message });
+    }
+});
+
 
 
 //ADMIN ROUTES
@@ -87,7 +117,7 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+    cb(null,file.originalname);
   }
 });
 
@@ -126,6 +156,27 @@ routes.post('/admin/register', async (req, res) => {
         res.status(201).json({ msg: "Admin registered successfully", newAdmin });
     } catch (error) {
         res.status(500).json({ msg: "Error registering admin", error: error.message });
+    }
+});
+
+// EDIT BY ID
+routes.put("/admin/product/:id", async (req, res) => {
+    const { id } = req.params;
+    const { productName, category, description, price, quantity, image } = req.body;
+    const collection = getCollection(); // Menggunakan fungsi untuk mendapatkan koleksi dari database Anda
+   
+
+    try {
+        const result = await collection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { productName, category, description, price, quantity, image } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ msg: "Product not found" });
+        }
+        res.status(200).json({ msg: "Product successfully updated" });
+    } catch (error) {
+        res.status(500).json({ msg: "Error updating product", error: error.message });
     }
 });
 

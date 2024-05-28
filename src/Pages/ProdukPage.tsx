@@ -1,5 +1,5 @@
 import { Box, Input, Text, Grid } from "@chakra-ui/react";
-import { useState } from "react"; // Import useState hook
+import { useEffect, useState } from "react"; // Import useState hook
 import Navbar from "../Components/Navbar";
 import Colors from "../constans/color";
 import dataProduct from "../Data/dummyDataProduct";
@@ -7,10 +7,18 @@ import ProductCard from "../Components/cards/productCard";
 import Helper from "../helpers";
 import { NavLink } from "react-router-dom";
 import FooterComponent from "../Components/Footer";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchProducts } from "../store/redux/action/admin/getProducts.fuinction";
 
 const ProdukPage = () => {
   // State untuk menyimpan kata kunci pencarian
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+  const products = useAppSelector((state) => state.fetchProduct.products);
 
   // Function untuk menghandle perubahan input pencarian
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,14 +59,14 @@ const ProdukPage = () => {
             Serum
           </Text>
 
-          {filteredDataProduct.length === 0 ? (
+          {products.length === 0 ? (
             <Text color={Colors.red} fontSize={"md"}>
               Produk tidak ada
             </Text>
           ) : (
             <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-              {filteredDataProduct.map((item) => (
-                <NavLink to={`/detail-produk/${item.id}`} key={item.id}>
+              {products.map((item: any) => (
+                <NavLink to={`/detail-produk/${item._id}`} key={item.id}>
                   <ProductCard
                     imageProduct={item.image}
                     key={item.id}

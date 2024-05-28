@@ -61,7 +61,7 @@ const NavbarAdmin = () => {
                   Produk
                 </Text>
               </NavLink>
-              <NavLink to="/edukasi">
+              <NavLink to="/admin/edukasi">
                 <Text
                   ml={8}
                   fontWeight={"semibold"}
@@ -115,15 +115,14 @@ const NavbarAdmin = () => {
           bgColor={"fontColor.white"}
           alignItems="center"
         >
-          <NavLink to="/">
-            <Heading
-              fontWeight={"bold"}
-              size={"md"}
-              color={useColorModeValue("fontColor.black", "primary.whiteDoff")}
-            >
-              HALAMAN ADMIN
-            </Heading>
-          </NavLink>
+          <Heading
+            fontWeight={"bold"}
+            size={"md"}
+            color={useColorModeValue("fontColor.black", "primary.whiteDoff")}
+          >
+            HALAMAN ADMIN
+          </Heading>
+
           <Spacer />
           <Box py="3">
             <Menu>
@@ -146,7 +145,7 @@ const NavbarAdmin = () => {
                     Produk
                   </Text>
                 </NavLink>
-                <NavLink to="/edukasi">
+                <NavLink to="/admin/edukasi">
                   <Text
                     ml={8}
                     fontWeight={"semibold"}

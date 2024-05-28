@@ -36,7 +36,8 @@ const AdminLogin: React.FC = () => {
           status: "success",
           isClosable: true
         });
-        navigate("/admin/products");
+        // navigate("/admin/products");
+        navigate("/admin/products", { replace: true });
       }
     } catch (error: any) {
       toast({

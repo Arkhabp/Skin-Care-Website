@@ -7,12 +7,39 @@ import dataProduct from "../Data/dummyDataProduct";
 import Helper from "../helpers";
 import Navbar from "../Components/Navbar";
 import FooterComponent from "../Components/Footer";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const DetailProduct = () => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const { id } = useParams();
-  const product = dataProduct.find((item) => item.id.toString() === id);
+
+  const [product, setProduct] = useState<product | null | any>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+        const productData = response.data;
+
+        setProduct(productData);
+      } catch (error: any) {
+        // If fetching product fails, use dummy data
+        setProduct(dataProduct.find((item) => item.id.toString() === id));
+        toast({
+          title: "Gagal memuat produk.",
+          description: error.message,
+          status: "error",
+          isClosable: true
+        });
+      }
+    };
+
+    fetchProduct();
+  }, [id, toast]);
 
   if (!product) {
     return (
@@ -50,7 +77,7 @@ const DetailProduct = () => {
         >
           <Box flex="1" display="flex" justifyContent="center">
             <Image
-              src={product.image}
+              src={`../../API/uploads/${product.image}`}
               alt={product.productName}
               borderRadius="md"
               boxSize={{ base: "300px", md: "400px" }}

@@ -18,6 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   price,
   onClick
 }) => {
+  console.log("Image Product Card:", imageProduct);
   return (
     <Box
       onClick={onClick}
@@ -38,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         justifyContent="center"
       >
         {/* Use imageProduct directly in the src attribute */}
-        <Image src={imageProduct} alt={altProduct} />
+        <Image src={`../../../API/uploads/${imageProduct}`} alt={altProduct} />
       </Box>
 
       <Stack>
