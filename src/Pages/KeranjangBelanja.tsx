@@ -10,7 +10,14 @@ import {
   Td,
   Button,
   Flex,
-  useToast
+  useToast,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogBody,
+  useDisclosure
 } from "@chakra-ui/react";
 import Colors from "../constans/color";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -24,13 +31,24 @@ import {
   increaseQuantity
 } from "../store/redux/action/addToChart.function";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 
 const KeranjangBelanja = () => {
   const cartItems = useAppSelector((state) => state.addTochart.product.data);
   const dispatch = useAppDispatch();
   const toast = useToast();
+
+  const {
+    isOpen: isOpenAlert,
+    onOpen: onOpenAlert,
+    onClose: onCloseAlert
+  } = useDisclosure();
+  const cancelRef = useRef<HTMLButtonElement | null>(null);
+
+  const [selectedItem, setSelectedItem] = useState<{
+    id: number;
+    productName: string;
+  } | null>(null);
 
   // Menghitung total belanja
   const totalBelanja = cartItems.reduce(
@@ -44,13 +62,22 @@ const KeranjangBelanja = () => {
   // Subtotal sebelum diskon (sama dengan total belanja)
   const subtotalBeforeDiscount = totalBelanja;
 
-  const handleDelete = (itemId: number, productName: string) => {
-    dispatch(deleteProduct(itemId));
-    toast({
-      title: `Berhasil menghapus dari keranjang: ${productName}`,
-      status: "error",
-      isClosable: true
-    });
+  const alertConfirmDelete = (item: { id: number; productName: string }) => {
+    setSelectedItem(item);
+    onOpenAlert();
+  };
+
+  const handleDelete = () => {
+    if (selectedItem) {
+      dispatch(deleteProduct(selectedItem.id));
+      toast({
+        title: `Berhasil menghapus dari keranjang: ${selectedItem.productName}`,
+        status: "error",
+        isClosable: true
+      });
+      setSelectedItem(null);
+      onCloseAlert();
+    }
   };
 
   const handleIncrease = (itemId: number) => {
@@ -61,7 +88,7 @@ const KeranjangBelanja = () => {
     dispatch(decreaseQuantity(itemId));
   };
 
-  //WHATSAPP
+  // WHATSAPP
   const buildWhatsAppMessage = (items: any[], total: number) => {
     let message = "Halo, saya ingin memesan produk berikut:\n\n";
     items.forEach((item) => {
@@ -76,6 +103,7 @@ const KeranjangBelanja = () => {
     )}\n\nTerima kasih.`;
     return message;
   };
+
   const handleCheckout = () => {
     const message = buildWhatsAppMessage(cartItems, totalBelanja);
     const phoneNumber = "+6287871051422"; // Ganti dengan nomor telepon tujuan
@@ -84,12 +112,6 @@ const KeranjangBelanja = () => {
     window.open(whatsappURL, "_blank");
     dispatch(clearCart());
   };
-
-  useEffect(() => {
-    axios.post(`http://localhost:5038/api/add-to-chart`).then((response) => {
-      console.log(response.data);
-    });
-  });
 
   return (
     <>
@@ -139,6 +161,7 @@ const KeranjangBelanja = () => {
                   <Th>Jumlah</Th>
                   <Th>Harga</Th>
                   <Th>Subtotal</Th>
+                  <Th>Aksi</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -165,9 +188,12 @@ const KeranjangBelanja = () => {
                         <Box
                           as="button"
                           onClick={() =>
-                            handleDelete(item.id, item.productName)
-                          } // Tambahkan onClick pada ikon
-                          cursor="pointer" // Tambahkan pointer cursor untuk menunjukkan bahwa ini dapat diklik
+                            alertConfirmDelete({
+                              id: item.id,
+                              productName: item.productName
+                            })
+                          } // Pass item details to the confirmation dialog
+                          cursor="pointer" // Add pointer cursor to indicate clickability
                         >
                           <Icons name="Delete" size="sm" color={Colors.red} />
                         </Box>
@@ -243,6 +269,33 @@ const KeranjangBelanja = () => {
           </Flex>
         )}
       </Flex>
+
+      <AlertDialog
+        isOpen={isOpenAlert}
+        leastDestructiveRef={cancelRef}
+        onClose={onCloseAlert}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Hapus Produk
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Kamu yakin ingin menghapus produk ini?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onCloseAlert}>
+                Batal
+              </Button>
+              <Button colorScheme="red" onClick={handleDelete} ml={3}>
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <FooterComponent />
     </>

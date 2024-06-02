@@ -1,19 +1,27 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Box, Text, Stack, Image, Flex, HStack } from "@chakra-ui/react";
 import Navbar from "../Components/Navbar";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import demoProduk from "../assets/images/demo-produk.png";
 import ButtonComponent from "../Components/Buttons/ButtonComponent";
 import Colors from "../constans/color";
 import ProductCard from "../Components/cards/productCard";
-import dataProduct from "../Data/dummyDataProduct";
 import EducationCard from "../Components/cards/educationCard";
 import dataVitamins from "../Data/dummyDataEducations";
 import FooterComponent from "../Components/Footer";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import Helper from "../helpers";
+import { fetchProducts } from "../store/redux/action/admin/getProducts.fuinction";
 
 const LandingPage = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+  const products = useAppSelector((state) => state.fetchProduct.products);
 
   return (
     <Box backgroundColor={Colors.lightgrey}>
@@ -49,16 +57,6 @@ const LandingPage = () => {
 
         <Box overflowX="hidden" py={5} position="relative">
           <Box overflowX="auto" py={5} _hover={{ cursor: "pointer" }}>
-            {/* <Box
-              aria-label="Scroll Left"
-              position="absolute"
-              top="50%"
-              left="0"
-              transform="translateY(-50%)"
-              onClick={() => handleScroll("left")}
-            >
-              <Icons name="ArrowLeft" />
-            </Box> */}
             <Box
               overflowX="auto"
               ref={scrollRef}
@@ -66,29 +64,19 @@ const LandingPage = () => {
               pl="10px"
             >
               <HStack spacing={4} px={5}>
-                {dataProduct.map((item) => (
-                  <NavLink to={`/detail-produk/${item.id}`} key={item.id}>
-                    <ProductCard
-                      key={item.id}
-                      imageProduct={item.image}
-                      productName={item.productName}
-                      desc={item.description}
-                      price={`Rp. ${item.price}`}
-                    />
-                  </NavLink>
+                {products.map((item: any) => (
+                  <ProductCard
+                    imageProduct={item.image} // URL ke gambar di folder uploads
+                    key={item._id || item.id}
+                    productName={item.productName}
+                    desc={item.description}
+                    price={Helper.formatPriceToRp(item.price)}
+                    to={`/detail-produk/${item._id}`}
+                    itemId={item.id}
+                  />
                 ))}
               </HStack>
             </Box>
-            {/* <Box
-              aria-label="Scroll Left"
-              position="absolute"
-              top="50%"
-              left="0"
-              transform="translateY(-50%)"
-              onClick={() => handleScroll("left")}
-            >
-              <Icons name="ArrowRight" />
-            </Box> */}
           </Box>
         </Box>
       </Box>

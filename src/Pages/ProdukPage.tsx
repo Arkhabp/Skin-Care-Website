@@ -5,7 +5,6 @@ import Colors from "../constans/color";
 import dataProduct from "../Data/dummyDataProduct";
 import ProductCard from "../Components/cards/productCard";
 import Helper from "../helpers";
-import { NavLink } from "react-router-dom";
 import FooterComponent from "../Components/Footer";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchProducts } from "../store/redux/action/admin/getProducts.fuinction";
@@ -66,15 +65,15 @@ const ProdukPage = () => {
           ) : (
             <Grid templateColumns="repeat(5, 1fr)" gap={6}>
               {products.map((item: any) => (
-                <NavLink to={`/detail-produk/${item._id}`} key={item.id}>
-                  <ProductCard
-                    imageProduct={item.image}
-                    key={item.id}
-                    productName={item.productName}
-                    desc={item.description}
-                    price={Helper.formatPriceToRp(item.price)}
-                  />
-                </NavLink>
+                <ProductCard
+                  imageProduct={item.image} // URL ke gambar di folder uploads
+                  key={item._id || item.id}
+                  productName={item.productName}
+                  desc={item.description}
+                  price={Helper.formatPriceToRp(item.price)}
+                  to={`/detail-produk/${item._id}`}
+                  itemId={item.id}
+                />
               ))}
             </Grid>
           )}
@@ -97,17 +96,21 @@ const ProdukPage = () => {
             </Box>
           ) : (
             <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-              {filteredDataProduct.map((item) => (
-                <NavLink to={`/detail-produk/${item.id}`} key={item.id}>
+              {products
+                .filter(
+                  (item: any) => item.category.toLowerCase() === "cleanser"
+                )
+                .map((item: any) => (
                   <ProductCard
-                    imageProduct={item.image}
-                    key={item.id}
+                    imageProduct={item.image} // URL ke gambar di folder uploads
+                    key={item._id || item.id}
                     productName={item.productName}
                     desc={item.description}
                     price={Helper.formatPriceToRp(item.price)}
+                    to={`/detail-produk/${item._id}`}
+                    itemId={item.id}
                   />
-                </NavLink>
-              ))}
+                ))}
             </Grid>
           )}
         </Box>

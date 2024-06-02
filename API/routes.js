@@ -12,10 +12,21 @@ const getCollection = () => {
     const collection = client.db("skincaredb").collection("products")
     return collection
 }
+const getCategoryCollection = () => {
+    const client = getConnectedClient();
+    const collection = client.db("skincaredb").collection("categories");
+    return collection;
+};
 
 const getAdminCollection = () => {
     const client = getConnectedClient();
     const collection = client.db("skincaredb").collection("admin");
+    return collection;
+};
+
+const getSubscriberCollection = () => {
+    const client = getConnectedClient();
+    const collection = client.db("skincaredb").collection("subscriber");
     return collection;
 };
 
@@ -38,7 +49,16 @@ routes.post("/products", async (req, res) => {
         return res.status(400).json({ msg: "Product and description are required" });
     }
     try {
-        const newProduct = await collection.insertOne({ productName, category ,description, price, quantity, image });
+         const newProduct = {
+            productName, 
+            category,
+            description, 
+            price, 
+            quantity, 
+            image,
+            createdAt: new Date()
+        };
+        const result = await collection.insertOne(newProduct);
         res.status(201).json({ msg: "Produk berhasil ditambahkan", newProduct });
     } catch (error) {
         res.status(500).json({ msg: "Error inserting product", error: error.message });
@@ -74,6 +94,56 @@ routes.get("/products/:id", async (req, res) => {
         res.status(500).json({ msg: "Error retrieving product", error: error.message });
     }
 });
+
+
+// POST untuk menambahkan kategori produk baru
+routes.post("/categories", async (req, res) => {
+    const { categoryName } = req.body;
+    if (!categoryName) {
+        return res.status(400).json({ msg: "Category name is required" });
+    }
+    try {
+        const collection = getCategoryCollection();
+        const newCategory = await collection.insertOne({ categoryName });
+        res.status(201).json({ msg: "Category added successfully", newCategory });
+    } catch (error) {
+        res.status(500).json({ msg: "Error adding category", error: error.message });
+    }
+});
+
+// GET all categories
+routes.get("/categories", async (req, res) => {
+    const collection = getCategoryCollection();
+    try {
+        const categories = await collection.find({}).toArray();
+        res.status(200).json(categories);
+    } catch (error) {
+        res.status(500).json({ msg: "Error fetching categories", error: error.message });
+    }
+});
+
+
+// POST untuk menambahkan data pengikut 
+routes.post("/user/subscribe", async (req, res) => {
+    const { name, phoneNumber } = req.body;
+    const newSubscriber = {
+            name,
+            phoneNumber,
+            createdAt: new Date()
+        };
+    if (!name, !phoneNumber) {
+        return res.status(400).json({ msg: "Data is required" });
+    }
+    try {
+        const collection = getSubscriberCollection();
+        const newCategory = await collection.insertOne(newSubscriber);
+        res.status(201).json({ msg: "Subscriber added successfully", newCategory });
+    } catch (error) {
+        res.status(500).json({ msg: "Error adding data subsriber", error: error.message });
+    }
+});
+
+
 
 
 
