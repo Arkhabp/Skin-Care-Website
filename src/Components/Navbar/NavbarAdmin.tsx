@@ -74,6 +74,19 @@ const NavbarAdmin = () => {
                   Edukasi
                 </Text>
               </NavLink>
+              <NavLink to="/admin/subsriber">
+                <Text
+                  ml={8}
+                  fontWeight={"semibold"}
+                  size={"md"}
+                  color={useColorModeValue(
+                    "fontColor.black",
+                    "primary.whiteDoff"
+                  )}
+                >
+                  Data Customer
+                </Text>
+              </NavLink>
               <NavLink to="/admin">
                 <Box ml={8} position={"relative"}>
                   <Icons name="Profile" size="lg" />
@@ -156,6 +169,19 @@ const NavbarAdmin = () => {
                     )}
                   >
                     Edukasi
+                  </Text>
+                </NavLink>
+                <NavLink to="/admin/subsriber">
+                  <Text
+                    ml={8}
+                    fontWeight={"semibold"}
+                    size={"md"}
+                    color={useColorModeValue(
+                      "fontColor.black",
+                      "primary.whiteDoff"
+                    )}
+                  >
+                    Data Customer
                   </Text>
                 </NavLink>
                 <NavLink to="/admin">

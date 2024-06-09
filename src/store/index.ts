@@ -11,11 +11,13 @@ import {
 import addTochartReducer from "./redux/reducers/addToChart.reducer";
 import { thunk } from "redux-thunk";
 import fetchProducts from "./redux/reducers/getProducts.reducer";
+import fetchCustomer from "./redux/reducers/getCustomer.reducer";
 
 export const store = configureStore({
   reducer: {
     addTochart: addTochartReducer,
-    fetchProduct: fetchProducts
+    fetchProduct: fetchProducts,
+    fetchCustomer: fetchCustomer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

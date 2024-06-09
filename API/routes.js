@@ -143,6 +143,31 @@ routes.post("/user/subscribe", async (req, res) => {
     }
 });
 
+// GET all customer
+routes.get("/admin/customer-data", async (req, res) => {
+    const collection = getSubscriberCollection();
+    try {
+        const customer = await collection.find({}).toArray();
+        res.status(200).json(customer);
+    } catch (error) {
+        res.status(500).json({ msg: "Error fetching customer", error: error.message });
+    }
+});
+
+// DELETE a customer by ID
+routes.delete("/admin/delete-customer/:id", async (req, res) => {
+    const { id } = req.params;
+    const collection = getSubscriberCollection();
+    try {
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ msg: "customer not found" });
+        }
+        res.status(200).json({ msg: "customer successfully deleted" });
+    } catch (error) {
+        res.status(500).json({ msg: "Error deleting customer", error: error.message });
+    }
+});
 
 
 

@@ -12,6 +12,7 @@ import ProtectedRoute from "./protectedRoute.tsx";
 import AdminProductPage from "./Pages/admin/AdminProductPage/AdminProductPage.tsx";
 import AdminDetailProduct from "./Pages/admin/AdminDetailProduct/AdminDetailProduct.tsx";
 import AdminEdukasiPage from "./Pages/admin/AdminEdukasiProduct/AdminEdukasiProduct.tsx";
+import AdminSubsriberPage from "./Pages/admin/AdminSubscriberPage/AdminSubsriberPage.tsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/products" element={<AdminProductPage />} />
             <Route path="/admin/edukasi" element={<AdminEdukasiPage />} />
+            <Route path="/admin/subsriber" element={<AdminSubsriberPage />} />
             <Route
               path="/admin/detail-produk/:id"
               element={<AdminDetailProduct />}
